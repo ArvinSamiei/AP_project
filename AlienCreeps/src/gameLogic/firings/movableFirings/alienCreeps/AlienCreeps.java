@@ -27,6 +27,7 @@ public class AlienCreeps extends MovableFirings implements Firings {
     boolean isFiring = false;
 
     public AlienCreeps(AlienCreepTypes alienCreepTypes) {
+        setPower(alienCreepTypes.getPower());
         this.alienCreepTypes = alienCreepTypes;
         this.energy = alienCreepTypes.initEnergy;
         Random random = new Random();
@@ -67,7 +68,6 @@ public class AlienCreeps extends MovableFirings implements Firings {
     }
 
     public void setEnergy(int energy) {
-        System.out.println("energyized");
         this.energy = energy;
     }
 
@@ -151,11 +151,13 @@ public class AlienCreeps extends MovableFirings implements Firings {
         isFiring = firing;
     }
 
-    public void weaken(YourFighters yourFighter) {
+    public void  weaken(YourFighters yourFighter) {
         yourFighter.setEnergy(yourFighter.getEnergy() - this.getPower());
+        System.out.println(yourFighter.getEnergy());
         if (yourFighter.isDead() == true) {
             if (yourFighter.getClass().equals(Hero.class)) {
                 Hero hero = (Hero) yourFighter;
+                hero.setDeadStat(true);
             }
         }
     }
@@ -186,9 +188,8 @@ public class AlienCreeps extends MovableFirings implements Firings {
 
     @Override
     public boolean isDead() {
-        if (energy <=0){
+        if (energy <= 0) {
             return true;
-        }
-        else return false;
+        } else return false;
     }
 }

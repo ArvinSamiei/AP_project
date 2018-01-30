@@ -79,7 +79,11 @@ public abstract class MovableFirings implements Firings {
     }
 
     public void setEnergy(int energy) {
-        this.energy = energy;
+        if (energy <= 0) {
+            this.energy = 0;
+        } else {
+            this.energy = energy;
+        }
     }
 
     public int getPower() {

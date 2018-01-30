@@ -48,6 +48,7 @@ public class MainScene extends Scene {
     AntiAircraftImages antiAircraftImages = new AntiAircraftImages();
     Label goldLabel = new Label("Gold : " + Engine.getInstance().getPlayer().getGold());
     Hero hero;
+    static Label enrgyOfHero;
 
     public MainScene(Parent root, double width, double height, Paint fill, Stage stage) {
         super(root, width, height, fill);
@@ -206,6 +207,9 @@ public class MainScene extends Scene {
 
         //key listener
         makeKeyListener(hero);
+
+        enrgyOfHero = new Label("Enrgy of hero : " + hero.getEnergy());
+        root.getChildren().add(enrgyOfHero);
 
 
         //map buttons :

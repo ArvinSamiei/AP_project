@@ -15,8 +15,7 @@ import java.util.ArrayList;
 
 public class Hero extends YourFighters implements Firings {
     private Group root;
-    private int energy;
-    private int power;
+    private boolean deadStat = false;
     private int fireRate;
     public Image[] moveLeftPics = new Image[4];
     public Image[] moveRightPics = new Image[4];
@@ -37,8 +36,6 @@ public class Hero extends YourFighters implements Firings {
 
     public Hero(Group root) {//todo change variables
         super();
-        this.energy = 100;
-        this.power = 8;
         this.fireRate = 5;
         setCoordinates(new int[]{1056, 872});
         this.root = root;
@@ -185,7 +182,6 @@ public class Hero extends YourFighters implements Firings {
             alienCreep.setEnergy(alienCreep.getEnergy() - gun.getPowerOnAirUnits());
         } else {
             alienCreep.setEnergy(alienCreep.getEnergy() - gun.getPowerOnGroundUnits());
-            System.out.println(alienCreep.getEnergy());
         }
     }
 
@@ -204,22 +200,6 @@ public class Hero extends YourFighters implements Firings {
         }
     }
 
-
-    public int getEnergy() {
-        return energy;
-    }
-
-    public void setEnergy(int energy) {
-        this.energy = energy;
-    }
-
-    public int getPower() {
-        return power;
-    }
-
-    public void setPower(int power) {
-        this.power = power;
-    }
 
     public int getFireRate() {
         return fireRate;
@@ -275,5 +255,14 @@ public class Hero extends YourFighters implements Firings {
         Engine.getInstance().getPlayer().setGold(Engine.getInstance().getPlayer().getGold() - gun.getPrice());
         this.gun = gun;
         return true;
+    }
+
+    public boolean isDeadStat() {
+        return deadStat;
+    }
+
+    @Override
+    public void setDeadStat(boolean deadStat) {
+        this.deadStat = deadStat;
     }
 }
