@@ -6,7 +6,6 @@ import gameLogic.firings.movableFirings.alienCreeps.AlienCreeps;
 import java.util.ArrayList;
 
 public abstract class MovableFirings implements Firings {
-    //private boolean movableMoved = false;
     private static ArrayList<MovableFirings> allMovableFirings = new ArrayList<>();
     private int speedUnmodified;
     private int speedModified;
@@ -115,13 +114,7 @@ public abstract class MovableFirings implements Firings {
         return allMovableFirings;
     }
 
-//    public boolean isMovableMoved() {
-//        return movableMoved;
-//    }
-//
-//    public void setMovableMoved(boolean movableMoved) {
-//        this.movableMoved = movableMoved;
-//    }
+
 
 
 }

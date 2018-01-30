@@ -9,6 +9,7 @@ import gameLogic.firings.Gun;
 import gameLogic.firings.Tesla;
 import gameLogic.firings.Weapon;
 import gameLogic.firings.movableFirings.Hero;
+import gameLogic.firings.movableFirings.alienCreeps.AlienCreeps;
 import gameLogic.map.WormHole;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -16,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -246,6 +248,31 @@ public class MainScene extends Scene {
             }
         });
 
+        makeGunButtons(root);
+
+        root.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.TAB) {
+                TextArea textArea = new TextArea();
+                root.getChildren().add(textArea);
+                textArea.setOnKeyPressed(event1 -> {
+                    if (event1.getCode() == KeyCode.ENTER) {
+                        if (textArea.getText().equals("handofgod")) {
+                            for (int i = 0; i < AlienCreeps.getAllAlienCreeps().size(); i++) {
+                                AlienCreeps alienCreeps = AlienCreeps.getAllAlienCreeps().get(i);
+                                AlienCreeps.getDeadAlienCreeps().add(alienCreeps);
+                                AlienCreeps.getAllAlienCreeps().remove(alienCreeps);
+                                i--;
+                            }
+                            root.getChildren().remove(textArea);
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+    private void makeGunButtons(Group root) {
         Button buyGunButton = new Button("Buy Gun");
         buyGunButton.relocate(30 * 32, 0);
         root.getChildren().add(buyGunButton);
@@ -295,7 +322,6 @@ public class MainScene extends Scene {
             buyGunRoot.getChildren().addAll(vBox);
             buyGunStage.show();
         });
-
     }
 
     private void makeEnergyOfHero(Group root) {

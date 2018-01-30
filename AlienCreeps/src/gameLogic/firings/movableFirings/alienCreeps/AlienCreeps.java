@@ -21,7 +21,7 @@ public class AlienCreeps extends MovableFirings implements Firings {
     private Path path;
     private int currentHomeNo = 0;
     private int moved32Pixel = 0;
-    private int[] coordinates = new int[2];
+    private int[] coordinates;
     ImageView imageView = new ImageView();
     private YourFighters shooterToThis;
     boolean isFiring = false;
