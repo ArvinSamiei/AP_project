@@ -1,12 +1,13 @@
 package gameLogic;
 
 import gameLogic.firings.Weapon;
+import gameLogic.firings.WeaponsObject;
 
 public class WeaponPlace {
     private static WeaponPlace[] weaponPlaces = new WeaponPlace[8];
     private int weaponPlaceNumber;
     private int[] coordinates = new int[2];
-    Weapon weapon;
+    WeaponsObject weapon;
 
     static {
         weaponPlaces[0] = new WeaponPlace(0, new int[]{352, 64});
@@ -33,7 +34,7 @@ public class WeaponPlace {
         WeaponPlace.weaponPlaces = weaponPlaces;
     }
 
-    public Weapon getWeapon() {
+    public WeaponsObject getWeapon() {
         return weapon;
     }
 
@@ -42,7 +43,7 @@ public class WeaponPlace {
             return false;
         }
         player.setGold(player.getGold() - Weapon.valueOf(name).getPrice());
-        this.weapon = Weapon.valueOf(name);
+        this.weapon = new WeaponsObject(Weapon.valueOf(name));
         return true;
     }
 

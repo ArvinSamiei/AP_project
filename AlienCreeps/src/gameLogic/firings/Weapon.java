@@ -7,11 +7,11 @@ import gameLogic.firings.movableFirings.alienCreeps.AlienCreeps;
 import java.util.ArrayList;
 
 public enum Weapon implements Firings {
-    AntiAircraft(0, 12, 30, 15, 20, 180, 1, false),
-    Freezer(5, 3, 20, 5, 60, 170, 1, true),
-    Laser(10, 7, 20, 7, 40, 150, 1, false),
-    MachineGun(10, 5, 20, 10, 0, 100, 1, false),
-    Rocket(20, 10, 40, 3, 0, 180, 1, true);
+    AntiAircraft(0, 12, 30 * 15, 15, 20, 180, 1, false),
+    Freezer(5, 3, 20 * 15, 5, 60, 170, 1, true),
+    Laser(10, 7, 20 * 15, 7, 40, 150, 1, false),
+    MachineGun(10, 5, 20 * 15, 10, 0, 100, 1, false),
+    Rocket(20, 10, 40 * 10, 3, 0, 180, 1, true);
 
     private int[] coordinate;
     private int powerOnGroundUnits;
@@ -21,10 +21,12 @@ public enum Weapon implements Firings {
     private int speedReduction;
     private int level;
     private boolean isPogromist;
-
+    private int counterForFire = 0;
     public int price;
+    private boolean fireStat = false;
+    private ArrayList<AlienCreeps> targets = new ArrayList<>();
 
-    Weapon(int powerOnGroundUnits, int powerOnAirUnits, double range, int fireRate, int speedReduction, int price, int level, boolean isPogromist)  {
+    Weapon(int powerOnGroundUnits, int powerOnAirUnits, double range, int fireRate, int speedReduction, int price, int level, boolean isPogromist) {
         setPrice(price);
         setPowerOnGroundUnits(powerOnGroundUnits);
         setPowerOnAirUnits(powerOnAirUnits);
@@ -115,37 +117,23 @@ public enum Weapon implements Firings {
         }
     }
 
-    public void weaken() { // TODO copy paste
-        ArrayList<AlienCreeps> targets = findWeaponTargets();
-            for (AlienCreeps target : targets) {
-                if (target.getAlienCreepTypes().getType().equals("air")) {
-                    target.setEnergy(target.getEnergy() - powerOnAirUnits);
-                } else {
-                    target.setEnergy(target.getEnergy() - powerOnGroundUnits);
-                }
-
-                targets = manageTargets(targets);
+    public void weaken(AlienCreeps target) { // TODO copy paste
+            if (target.getAlienCreepTypes().getType().equals("air")) {
+                target.setEnergy(target.getEnergy() - powerOnAirUnits);
+            } else {
+                target.setEnergy(target.getEnergy() - powerOnGroundUnits);
             }
-        
+
     } // TODO Copy paste bood
 
-    public void freeze() {
-        ArrayList<AlienCreeps> targets = findWeaponTargets();
-
-            for (MovableFirings target : targets) {
-                if (target.getSpeedModified() != target.getSpeedUnmodified()) {
-                    continue;//TODO
-                }
-
-                target.setSpeedModified(((100 - speedReduction) / 100) * target.getSpeedUnmodified());
-            }
-        
+    public void freeze(AlienCreeps target) {
+    //    target.getAlienCreepTypes().setSpeed(((100 - speedReduction) / 100) * target.getAlienCreepTypes().getSpeed());
     }
 
 
-    public void shoot() {
-        weaken();
-        freeze();
+    public void shoot(AlienCreeps target) {
+        weaken(target);
+        freeze(target);
     }
 
     public void setPrice(int price) {
@@ -218,5 +206,29 @@ public enum Weapon implements Firings {
 
     public int getPrice() {
         return price;
+    }
+
+    public int getCounterForFire() {
+        return counterForFire;
+    }
+
+    public void setCounterForFire(int counterForFire) {
+        this.counterForFire = counterForFire;
+    }
+
+    public ArrayList<AlienCreeps> getTargets() {
+        return targets;
+    }
+
+    public void setTargets(ArrayList<AlienCreeps> targets) {
+        this.targets = targets;
+    }
+
+    public boolean isFireStat() {
+        return fireStat;
+    }
+
+    public void setFireStat(boolean fireStat) {
+        this.fireStat = fireStat;
     }
 }

@@ -2,6 +2,7 @@ package view;
 
 import controller.ControllerClass;
 import controller.TimerOfGame;
+import gameLogic.Barrack;
 import gameLogic.Engine;
 import gameLogic.WeaponPlace;
 import gameLogic.firings.Gun;
@@ -20,6 +21,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -49,10 +52,17 @@ public class MainScene extends Scene {
     Label goldLabel = new Label("Gold : " + Engine.getInstance().getPlayer().getGold());
     Hero hero;
     static Label enrgyOfHero;
+    static MediaPlayer mediaPlayer;
+    Media[] medias = new Media[2];
+    ImageView[] weaponplacesImages = new ImageView[8];
 
     public MainScene(Parent root, double width, double height, Paint fill, Stage stage) {
         super(root, width, height, fill);
         makeMainScene(this, stage);
+        medias[0] = new Media(new File("music/02 Vay Behalesh.mp3").toURI().toString());
+        medias[1] = new Media(new File("music/Aamin - Shafa.mp3").toURI().toString());
+        mediaPlayer = new MediaPlayer(medias[0]);
+        mediaPlayer.play();
     }
 
     private void makeEventHandlerForWeaponButtons(ArrayList<Button> buttons, int numOfWeaponPlace, Stage stage, ImageView[] weaponPlaces) {
@@ -208,8 +218,7 @@ public class MainScene extends Scene {
         //key listener
         makeKeyListener(hero);
 
-        enrgyOfHero = new Label("Enrgy of hero : " + hero.getEnergy());
-        root.getChildren().add(enrgyOfHero);
+        makeEnergyOfHero(root);
 
 
         //map buttons :
@@ -222,6 +231,8 @@ public class MainScene extends Scene {
 
         buildClock(root);
         buildGoldLabel(root);
+
+        makeChangeMusicButton(root);
 
         makeWormHoleImages(root);
         mainScene.setOnKeyPressed(event -> {
@@ -287,6 +298,43 @@ public class MainScene extends Scene {
 
     }
 
+    private void makeEnergyOfHero(Group root) {
+        enrgyOfHero = new Label("Enrgy of hero : " + hero.getEnergy());
+        enrgyOfHero.setStyle("-fx-background-color: \n" +
+                "        #a6b5c9,\n" +
+                "        linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),\n" +
+                "        linear-gradient(#020b02, #3a3a3a),\n" +
+                "        linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),\n" +
+                "        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));\n" +
+                "    -fx-background-radius: 5,4,3,5;\n" +
+                "    -fx-background-insets: 0,1,2,0;\n" +
+                "    -fx-text-fill: white;\n" +
+                "    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );\n" +
+                "    -fx-font-family: \"Arial\";\n" +
+                "    -fx-text-fill: linear-gradient(white, #d0d0d0);\n" +
+                "    -fx-font-size: 12px;\n" +
+                "    -fx-padding: 10 20 10 20;" +
+                "-fx-font-weight: bold;");
+        root.getChildren().add(enrgyOfHero);
+    }
+
+    private void makeChangeMusicButton(Group root) {
+        Button changeMusicButton = new Button("Change Music");
+        changeMusicButton.relocate(16 * 32, 0);
+        root.getChildren().add(changeMusicButton);
+        changeMusicButton.setOnMouseClicked(event -> {
+            if (mediaPlayer.getMedia() == medias[0]) {
+                mediaPlayer.stop();
+                mediaPlayer = new MediaPlayer(medias[1]);
+                mediaPlayer.play();
+            } else {
+                mediaPlayer.stop();
+                mediaPlayer = new MediaPlayer(medias[0]);
+                mediaPlayer.play();
+            }
+        });
+    }
+
     private void makeWormHoleImages(Group root) {
         for (WormHole wormHole : WormHole.getWormHoles()) {
             try {
@@ -333,7 +381,7 @@ public class MainScene extends Scene {
             weaponplaces[2] = new ImageView(new Image(new FileInputStream(new File("images/map images/weaponPlace.png"))));
             weaponplaces[3] = new ImageView(new Image(new FileInputStream(new File("images/map images/weaponPlace.png"))));
             weaponplaces[4] = new ImageView(new Image(new FileInputStream(new File("images/map images/weaponPlace.png"))));
-            weaponplaces[5] = new ImageView(new Image(new FileInputStream(new File("images/map images/weaponPlace.png"))));
+            weaponplaces[5] = Barrack.getInstance().getImageView();
             weaponplaces[6] = new ImageView(new Image(new FileInputStream(new File("images/map images/weaponPlace.png"))));
             weaponplaces[7] = new ImageView(new Image(new FileInputStream(new File("images/map images/weaponPlace.png"))));
             weaponplaces[7].relocate(192, 544);
@@ -344,6 +392,7 @@ public class MainScene extends Scene {
             weaponplaces[2].relocate(800, 736);
             weaponplaces[1].relocate(1056, 736);
             weaponplaces[0].relocate(352, 64);
+            weaponplacesImages = weaponplaces;
             makeAllWeapnPlaceEventHandlers(weaponplaces);
 
             root.getChildren().add(background);
@@ -571,5 +620,13 @@ public class MainScene extends Scene {
 
     public void setClock(Label clock) {
         this.clock = clock;
+    }
+
+    public MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
+
+    public void setMediaPlayer(MediaPlayer mediaPlayer) {
+        this.mediaPlayer = mediaPlayer;
     }
 }
