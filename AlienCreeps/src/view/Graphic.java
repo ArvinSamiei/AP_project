@@ -283,6 +283,7 @@ public class Graphic extends Application {
                     } else {
                         soldier.setCounterForFire(soldier.getCounterForFire() + 1);
                         if (soldier.getCounterForFire() % (60 / soldier.getFireRate()) == 0) {
+                            System.out.println("hello");
                             soldier.weaken(soldier.getTarget());
                             soldier.getTarget().setFiring(true);
                             if (soldier.getTarget().isDead()) {

@@ -265,6 +265,16 @@ public class MainScene extends Scene {
                             }
                             root.getChildren().remove(textArea);
                         }
+                        else {
+                            if (textArea.getText().equals("money")){
+                                Engine.getInstance().getPlayer().setGold(Engine.getInstance().getPlayer().getGold() + 200);
+                                root.getChildren().remove(textArea);
+                            }
+                        }
+                        if (textArea.getText().equals("health")){
+                            Engine.getInstance().hero.setEnergy(Engine.getInstance().hero.getEnergy() + 100);
+                            root.getChildren().remove(textArea);
+                        }
                     }
                 });
             }
