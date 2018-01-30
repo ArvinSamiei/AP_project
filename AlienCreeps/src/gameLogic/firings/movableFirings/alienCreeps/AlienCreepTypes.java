@@ -13,9 +13,10 @@ public enum AlienCreepTypes {
 
     private String type;//air or ground
     int initEnergy;
-    int speed;
+    public int speed;
     int power;
     int fireRate;
+    int speedModified;
 
     public void shoot(TimerOfGame time) {
         //TODO
@@ -32,6 +33,7 @@ public enum AlienCreepTypes {
         this.speed = speed;
         this.power = power;
         this.fireRate = fireRate;
+        speedModified = speed;
     }
 
     public String getType() {
@@ -52,11 +54,11 @@ public enum AlienCreepTypes {
     }
 
     public int getSpeed() {
-        return speed;
+        return speedModified;
     }
 
     public void setSpeed(int speed) {
-        this.speed = speed;
+        this.speedModified = speed;
     }
 
     public int getPower() {
@@ -73,5 +75,12 @@ public enum AlienCreepTypes {
 
     public void setFireRate(int fireRate) {
         this.fireRate = fireRate;
+    }
+    public int getSpeedModified() {
+        return speedModified;
+    }
+
+    public void setSpeedModified(int speedModified) {
+        this.speedModified = speedModified;
     }
 }

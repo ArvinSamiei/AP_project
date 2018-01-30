@@ -34,13 +34,7 @@ public abstract class MovableFirings implements Firings {
         return isPogromist;
     }
 
-    public int getSpeedModified() {
-        return speedModified;
-    }
 
-    public void setSpeedModified(int speedModified) {
-        this.speedModified = speedModified;
-    }
 
 
     public boolean isDead() {
@@ -62,14 +56,6 @@ public abstract class MovableFirings implements Firings {
     // alaki neveshtam ke too soldier gir nade ke constructor benevis
     public MovableFirings() {
 
-    }
-
-    public int getSpeedUnmodified() {
-        return speedUnmodified;
-    }
-
-    public void setSpeedUnmodified(int speedUnmodified) {
-        this.speedUnmodified = speedUnmodified;
     }
 
 

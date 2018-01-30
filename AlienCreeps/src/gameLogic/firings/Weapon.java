@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public enum Weapon implements Firings {
     AntiAircraft(0, 12, 30 * 15, 15, 20, 180, 1, false),
-    Freezer(5, 3, 20 * 15, 5, 60, 170, 1, true),
+    Freezer(5, 3, 20 * 10, 5, 60, 170, 1, true),
     Laser(10, 7, 20 * 15, 7, 40, 150, 1, false),
-    MachineGun(10, 5, 20 * 15, 10, 0, 100, 1, false),
+    MachineGun(10, 2, 20 * 15, 10, 0, 100, 1, false),
     Rocket(20, 10, 40 * 10, 3, 0, 180, 1, true);
 
     private int[] coordinate;

@@ -149,6 +149,6 @@ public class WeaponsObject {
     }
 
     public void freeze(AlienCreeps target) {
-
+        target.getAlienCreepTypes().setSpeed(target.getAlienCreepTypes().speed - this.speedReduction);
     }
 }

@@ -4,6 +4,7 @@ import controller.ControllerClass;
 import gameLogic.Barrack;
 import gameLogic.Engine;
 import gameLogic.WeaponPlace;
+import gameLogic.firings.Weapon;
 import gameLogic.firings.WeaponsObject;
 import gameLogic.firings.movableFirings.Hero;
 import gameLogic.firings.movableFirings.MovableFirings;
@@ -145,6 +146,11 @@ public class Graphic extends Application {
                 }
 
                 WeaponsObject weapon = weaponPlace.getWeapon();
+                if (weapon.getWeapon().equals(Weapon.Freezer)){
+                    for (AlienCreeps alienCreeps : weapon.getTargets()) {
+                        alienCreeps.getAlienCreepTypes().setSpeed(alienCreeps.getAlienCreepTypes().speed);
+                    }
+                }
                 weapon.getTargets().clear();
                 for (int i1 = 0; i1 < AlienCreeps.getAllAlienCreeps().size(); i1++) {
                     AlienCreeps alienCreeps = AlienCreeps.getAllAlienCreeps().get(i1);
@@ -152,6 +158,9 @@ public class Graphic extends Application {
                     int y = Math.abs(alienCreeps.getCoordinates()[1] - weaponPlace.getCoordinates()[1]);
 
                     if (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) <= weapon.getRange()) {
+                        if (weapon.getPowerOnAirUnits() == 0 && alienCreeps.getAlienCreepTypes().getType().equals("air")) {
+                            continue;
+                        }
                         weapon.getTargets().add(alienCreeps);
                         if (weapon.isPogromist() == false) {
                             break;

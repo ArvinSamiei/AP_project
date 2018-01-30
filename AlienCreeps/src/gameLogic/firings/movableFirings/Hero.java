@@ -163,16 +163,7 @@ public class Hero extends YourFighters implements Firings {
 
     @Override
     public void freeze() {
-        if (targets.size() == 0) {
-            counterForFire = 0;
-        }
-        for (MovableFirings target : targets) {
-            if (target.getSpeedModified() != target.getSpeedUnmodified()) {
-                continue;//TODO
-            }
 
-            target.setSpeedModified(((100 - gun.getSpeedReduction()) / 100) * target.getSpeedUnmodified());
-        }
     }
 
 
