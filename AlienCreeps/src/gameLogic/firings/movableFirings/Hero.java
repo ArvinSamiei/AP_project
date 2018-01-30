@@ -1,5 +1,6 @@
 package gameLogic.firings.movableFirings;
 
+import gameLogic.Barrack;
 import gameLogic.Engine;
 import gameLogic.firings.Firings;
 import gameLogic.firings.Gun;
@@ -14,6 +15,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class Hero extends YourFighters implements Firings {
+    int timeToreturn = 90;
+    int timeLeftToReturn = 90;
     private Group root;
     private boolean deadStat = false;
     private int fireRate;
@@ -255,6 +258,22 @@ public class Hero extends YourFighters implements Firings {
         Engine.getInstance().getPlayer().setGold(Engine.getInstance().getPlayer().getGold() - gun.getPrice());
         this.gun = gun;
         return true;
+    }
+
+    public int getTimeToreturn() {
+        return timeToreturn;
+    }
+
+    public void setTimeToreturn(int timeToreturn) {
+        this.timeToreturn = timeToreturn;
+    }
+
+    public int getTimeLeftToReturn() {
+        return timeLeftToReturn;
+    }
+
+    public void setTimeLeftToReturn(int timeLeftToReturn) {
+        this.timeLeftToReturn = timeLeftToReturn;
     }
 
     public boolean isDeadStat() {

@@ -152,6 +152,9 @@ public class AlienCreeps extends MovableFirings implements Firings {
     }
 
     public void  weaken(YourFighters yourFighter) {
+        if (yourFighter == null){
+            return;
+        }
         yourFighter.setEnergy(yourFighter.getEnergy() - this.getPower());
         System.out.println(yourFighter.getEnergy());
         if (yourFighter.isDead() == true) {
