@@ -5,7 +5,6 @@ import gameLogic.Engine;
 import gameLogic.firings.movableFirings.Hero;
 import gameLogic.firings.movableFirings.MovableFirings;
 import gameLogic.firings.movableFirings.Soldier;
-import gameLogic.firings.movableFirings.alienCreeps.AlienCreepTypes;
 import gameLogic.firings.movableFirings.alienCreeps.AlienCreeps;
 import gameLogic.map.WormHole;
 import javafx.animation.AnimationTimer;
@@ -103,17 +102,18 @@ public class Graphic extends Application {
 
             //}
 
+            firingPicsOfAliens();
+
             for (AlienCreeps alienCreeps : AlienCreeps.getAllAlienCreeps()) {
                 if (alienCreeps.isFiring() == false) {
                     continue;
                 }
-
                 alienCreeps.setCounterForFire(alienCreeps.getCounterForFire() + 1);
                 if ((alienCreeps.getCounterForFire() % (60 / alienCreeps.getAlienCreepTypes().getFireRate())) != 0) {
                     continue;
                 }
                 alienCreeps.weaken(alienCreeps.getShooterToThis());
-                if (alienCreeps.getShooterToThis() == null){
+                if (alienCreeps.getShooterToThis() == null) {
                     break;
                 }
                 if (alienCreeps.getShooterToThis().isDead()) {
@@ -121,81 +121,11 @@ public class Graphic extends Application {
                     alienCreeps.setFiring(false);
                     break;
                 }
-                int x = alienCreeps.getCoordinates()[0] - alienCreeps.getShooterToThis().getCoordinates()[0];
-                int y = alienCreeps.getCoordinates()[0] - alienCreeps.getShooterToThis().getCoordinates()[1];
-                if (alienCreeps.getShooterToThis() instanceof Hero) {
-                    //TODO add different type of firing
-                    // if (x > 0) {
-//                    switch (alienCreeps.getAlienCreepTypes()) {
-//                        case Aironion:
-//                            alienCreeps.getImageView().setImage(aironionImages.getFiringImages()[0]);
-//                            System.out.println("ghghghghghhg");
-//                            break;
-//                        case Activionion:
-//                            alienCreeps.getImageView().setImage(activinionImages.getFiringImages()[0]);
-//                            System.out.println("ghghghghghhg");
-//                            break;
-//                        case Albertonion:
-//                            alienCreeps.getImageView().setImage(albertonionImages.getFiringImages()[0]);
-//                            System.out.println("ghghghghghhg");
-//                            break;
-//                        case Algwasonion:
-//                            alienCreeps.getImageView().setImage(algwasonionImages.getFiringImages()[0]);
-//                            System.out.println("ghghghghghhg");
-//                            break;
-//                    }
-                    //}
-//                    } else if (x < 0) {
-//                        switch (alienCreeps.getAlienCreepTypes()) {
-//                            case Aironion:
-//                                alienCreeps.getImageView().setImage(aironionImages.getFiringImages()[alienCreeps.getCounterForFire() % 4]);
-//                                break;
-//                            case Activionion:
-//                                alienCreeps.getImageView().setImage(activinionImages.getFiringImages()[alienCreeps.getCounterForFire() % 4]);
-//                                break;
-//                            case Albertonion:
-//                                alienCreeps.getImageView().setImage(albertonionImages.getFiringImages()[alienCreeps.getCounterForFire() % 4]);
-//                                break;
-//                            case Algwasonion:
-//                                alienCreeps.getImageView().setImage(algwasonionImages.getFiringImages()[alienCreeps.getCounterForFire() % 4]);
-//                                break;
-//                        }
-//                    } else if (x == 0) {
-//                        if (y <= 0) {
-//                            switch (alienCreeps.getAlienCreepTypes()) {
-//                                case Aironion:
-//                                    alienCreeps.getImageView().setImage(aironionImages.getFiringImages()[alienCreeps.getCounterForFire() % 4]);
-//                                    break;
-//                                case Activionion:
-//                                    alienCreeps.getImageView().setImage(activinionImages.getFiringImages()[alienCreeps.getCounterForFire() % 4]);
-//                                    break;
-//                                case Albertonion:
-//                                    alienCreeps.getImageView().setImage(albertonionImages.getFiringImages()[alienCreeps.getCounterForFire() % 4]);
-//                                    break;
-//                                case Algwasonion:
-//                                    alienCreeps.getImageView().setImage(algwasonionImages.getFiringImages()[alienCreeps.getCounterForFire() % 4]);
-//                                    break;
-//                            }
-//                        } else {
-//                            if (y > 0) {
-//                                switch (alienCreeps.getAlienCreepTypes()) {
-//                                    case Aironion:
-//                                        alienCreeps.getImageView().setImage(aironionImages.getFiringImages()[alienCreeps.getCounterForFire() % 4]);
-//                                        break;
-//                                    case Activionion:
-//                                        alienCreeps.getImageView().setImage(activinionImages.getFiringImages()[alienCreeps.getCounterForFire() % 4]);
-//                                        break;
-//                                    case Albertonion:
-//                                        alienCreeps.getImageView().setImage(albertonionImages.getFiringImages()[alienCreeps.getCounterForFire() % 4]);
-//                                        break;
-//                                    case Algwasonion:
-//                                        alienCreeps.getImageView().setImage(algwasonionImages.getFiringImages()[alienCreeps.getCounterForFire() % 4]);
-//                                        break;
-//                                }
-//                            }
-//                        }
-//                    }
-                }
+//                int x = alienCreeps.getCoordinates()[0] - alienCreeps.getShooterToThis().getCoordinates()[0];
+//                int y = alienCreeps.getCoordinates()[0] - alienCreeps.getShooterToThis().getCoordinates()[1];
+//                if (alienCreeps.getShooterToThis() instanceof Hero) {
+//
+//                }
             }
 
             for (Soldier soldier : Engine.getInstance().hero.getAllSoldiers()) {
@@ -205,27 +135,13 @@ public class Graphic extends Application {
                 soldier.setCounterForFire(soldier.getCounterForFire() + 1);
             }
 
-            for (AlienCreeps alienCreeps : AlienCreeps.getAllAlienCreeps()) {
-                if (alienCreeps.getShooterToThis() == null) {
-                    alienCreeps.setCounterForFire(0);
-                    break;
-                }
-                if (alienCreeps.getCounterForFire() % (60 / alienCreeps.getAlienCreepTypes().getFireRate()) == 0) {
-                    if (alienCreeps.getCounterForFire() == alienCreeps.getFireRate()) {
-                        alienCreeps.setCounterForFire(0);
-                    }
-                    //alienCreeps.weaken();
-
-                }
-            }
             if (hero.isDeadStat() == true) {
                 hero.setTimeLeftToReturn(hero.getTimeLeftToReturn() - 1);
-                if (hero.getTimeLeftToReturn() == 0){
+                if (hero.getTimeLeftToReturn() == 0) {
                     hero.setDeadStat(false);
                     hero.setTimeLeftToReturn(hero.getTimeToreturn());
                     hero.setEnergy(300);
-                }
-                else {
+                } else {
                     try {
                         hero.getImageView().setImage(new Image(new FileInputStream("images/hero images/Die4.png")));
                     } catch (FileNotFoundException e) {
@@ -235,9 +151,71 @@ public class Graphic extends Application {
             }
 
         }
-
-
     };
+
+    private void firingPicsOfAliens() {
+        for (AlienCreeps alienCreeps : AlienCreeps.getAllAlienCreeps()) {
+            if (alienCreeps.isFiring() == false) {
+                continue;
+            }
+            if ((alienCreeps.getCounterForFire() % (60 / alienCreeps.getAlienCreepTypes().getFireRate())) != 0) {
+                continue;
+            }
+            if (alienCreeps.getShooterToThis() != null) {
+                try {
+                    switch (alienCreeps.getAlienCreepTypes()) {
+                        case Aironion:
+                            if (alienCreeps.getCounterForFire() % 3 == 0) {
+                                alienCreeps.getImageView().setImage(new Image(new FileInputStream("images/Aironion/AironionFire0.png")));
+                            } else if (alienCreeps.getCounterForFire() % 3 == 1) {
+                                alienCreeps.getImageView().setImage(new Image(new FileInputStream("images/Aironion/AironionFire1.png")));
+                            } else {
+                                alienCreeps.getImageView().setImage(new Image(new FileInputStream("images/Aironion/AironionFire2.png")));
+                            }
+                            System.out.println("ghghghghghhg");
+                            break;
+                        case Activionion:
+                            if (alienCreeps.getCounterForFire() % 4 == 0) {
+                                alienCreeps.getImageView().setImage(new Image(new FileInputStream("images/Activinion/Activinion_attack0.png")));
+                            } else if (alienCreeps.getCounterForFire() % 4 == 1) {
+                                alienCreeps.getImageView().setImage(new Image(new FileInputStream("images/Activinion/Activinion_attack1.png")));
+                            } else if (alienCreeps.getCounterForFire() % 4 == 2) {
+                                alienCreeps.getImageView().setImage(new Image(new FileInputStream("images/Activinion/Activinion_attack4.png")));
+                            }
+                            System.out.println("ghghghghghhg");
+                            break;
+                        case Albertonion:
+                            if (alienCreeps.getCounterForFire() % 4 == 0) {
+                                alienCreeps.getImageView().setImage(new Image(new FileInputStream("images/Albertonion/firing0.png")));
+                            } else if (alienCreeps.getCounterForFire() % 4 == 1) {
+                                alienCreeps.getImageView().setImage(new Image(new FileInputStream("images/Albertonion/firing1.png")));
+                            } else if (alienCreeps.getCounterForFire() % 4 == 2) {
+                                alienCreeps.getImageView().setImage(new Image(new FileInputStream("images/Albertonion/firing2.png")));
+                            } else if (alienCreeps.getCounterForFire() % 4 == 3) {
+                                alienCreeps.getImageView().setImage(new Image(new FileInputStream("images/Albertonion/firing3.png")));
+                            }
+                            System.out.println("ghghghghghhg");
+                            break;
+                        case Algwasonion:
+                            if (alienCreeps.getCounterForFire() % 4 == 0) {
+                                alienCreeps.getImageView().setImage(new Image(new FileInputStream("images/Algwasonion/firing0.png")));
+                            } else if (alienCreeps.getCounterForFire() % 4 == 1) {
+                                alienCreeps.getImageView().setImage(new Image(new FileInputStream("images/Algwasonion/firing1.png")));
+                            } else if (alienCreeps.getCounterForFire() % 4 == 2) {
+                                alienCreeps.getImageView().setImage(new Image(new FileInputStream("images/Algwasonion/firing2.png")));
+                            } else if (alienCreeps.getCounterForFire() % 4 == 3) {
+                                alienCreeps.getImageView().setImage(new Image(new FileInputStream("images/Algwasonion/firing3.png")));
+                            }
+                            System.out.println("ghghghghghhg");
+                            break;
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
 
     private void heroFire(Hero hero) {
         if (hero.getTarget() != null && hero.getEnergy() > 0) {
@@ -249,25 +227,6 @@ public class Graphic extends Application {
                 if (Engine.getInstance().hero.getCounterForFire() % (60 / Engine.getInstance().hero.getFireRate()) == 0) {
                     hero.weaken(hero.getTarget());
                     hero.getTarget().setFiring(true);
-                    AlienCreeps alienCreeps = hero.getTarget();
-                    switch (alienCreeps.getAlienCreepTypes()) {
-                        case Aironion:
-                            alienCreeps.getImageView().setImage(aironionImages.getFiringImages()[2]);
-                            System.out.println("ghghghghghhg");
-                            break;
-                        case Activionion:
-                            alienCreeps.getImageView().setImage(activinionImages.getFiringImages()[2]);
-                            System.out.println("ghghghghghhg");
-                            break;
-                        case Albertonion:
-                            alienCreeps.getImageView().setImage(albertonionImages.getFiringImages()[2]);
-                            System.out.println("ghghghghghhg");
-                            break;
-                        case Algwasonion:
-                            alienCreeps.getImageView().setImage(algwasonionImages.getFiringImages()[2]);
-                            System.out.println("ghghghghghhg");
-                            break;
-                    }
                     if (hero.getTarget().isDead()) {
                         AlienCreeps.getDeadAlienCreeps().add(hero.getTarget());
                         AlienCreeps.getAllAlienCreeps().remove(hero.getTarget());
