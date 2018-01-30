@@ -11,6 +11,7 @@ public class Soldier extends YourFighters implements Firings {
     public Soldier() { // hero behesh ezafe kardam ta too sarbazash adesh konam
         super(true);
         Engine.getInstance().hero.getAllSoldiers().add(this);
+        MovableFirings.getAllMovableFirings().add(this);
     }
 
     public boolean isDead(Hero hero, Barrack barrack) {

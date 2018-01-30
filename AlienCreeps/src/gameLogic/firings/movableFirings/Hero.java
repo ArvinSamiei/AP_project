@@ -30,6 +30,7 @@ public class Hero extends YourFighters implements Firings {
     private int walkState = 0;
     Gun gun = Gun.AK47;
     private AlienCreeps target;
+    private ArrayList<AlienCreeps> targets = new ArrayList<>();
     int counterForFire = 0;
     private ArrayList<Soldier> allSoldiers = new ArrayList<>();
     ImageView imageView = new ImageView();
@@ -127,19 +128,19 @@ public class Hero extends YourFighters implements Firings {
             imageView.setImage(hero);
             root.getChildren().add(imageView);
             for (int i = 0; i < 4; i++) {
-                if (hero == moveLeftPics[i]){
+                if (hero == moveLeftPics[i]) {
                 }
             }
             for (int i = 0; i < 4; i++) {
-                if (hero == moveRightPics[i]){
+                if (hero == moveRightPics[i]) {
                 }
             }
             for (int i = 0; i < 4; i++) {
-                if (hero == moveForwardPics[i]){
+                if (hero == moveForwardPics[i]) {
                 }
             }
             for (int i = 0; i < 4; i++) {
-                if (hero == moveDownwardPics[i]){
+                if (hero == moveDownwardPics[i]) {
                 }
             }
         } catch (Exception e) {
@@ -267,5 +268,12 @@ public class Hero extends YourFighters implements Firings {
         this.target = target;
     }
 
-
+    public boolean setGun(Gun gun) {
+        if (Engine.getInstance().getPlayer().getGold() - gun.getPrice() < 0) {
+            return false;
+        }
+        Engine.getInstance().getPlayer().setGold(Engine.getInstance().getPlayer().getGold() - gun.getPrice());
+        this.gun = gun;
+        return true;
+    }
 }

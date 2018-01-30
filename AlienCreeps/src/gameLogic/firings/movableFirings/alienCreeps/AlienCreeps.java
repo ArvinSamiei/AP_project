@@ -51,6 +51,7 @@ public class AlienCreeps extends MovableFirings implements Firings {
         }
         coordinates = new int[]{path.getThisPathHomes().get(0)[0], path.getThisPathHomes().get(0)[1]};
         allAlienCreeps.add(this);
+        MovableFirings.getAllMovableFirings().add(this);
     }
 
     public static ArrayList<AlienCreeps> getAllAlienCreeps() {

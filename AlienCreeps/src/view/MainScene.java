@@ -4,6 +4,7 @@ import controller.ControllerClass;
 import controller.TimerOfGame;
 import gameLogic.Engine;
 import gameLogic.WeaponPlace;
+import gameLogic.firings.Gun;
 import gameLogic.firings.Tesla;
 import gameLogic.firings.Weapon;
 import gameLogic.firings.movableFirings.Hero;
@@ -231,6 +232,8 @@ public class MainScene extends Scene {
         });
 
         Button buyGunButton = new Button("Buy Gun");
+        buyGunButton.relocate(30 * 32, 0);
+        root.getChildren().add(buyGunButton);
         buyGunButton.setOnMouseClicked(event -> {
             Stage buyGunStage = new Stage();
             Scene buyGunScene = new Scene(new Group());
@@ -239,13 +242,43 @@ public class MainScene extends Scene {
             Button AK47Button = new Button("AK47");
             Button shotGunButton = new Button("ShotGun");
             Button sniperRifleButton = new Button("SniperRifle");
+            Button quitButton = new Button("Quit");
             Label label = new Label("Choose gun");
             VBox vBox = new VBox();
-            ArrayList<Button> gunButtons = new ArrayList<>(Arrays.asList());
+            ArrayList<Button> gunButtons = new ArrayList<>(Arrays.asList(AK47Button, shotGunButton, sniperRifleButton));
 
-            vBox.getChildren().addAll(label, AK47Button, shotGunButton, sniperRifleButton);
+            vBox.getChildren().addAll(label);
+            gunButtons.forEach(button -> {
+                vBox.getChildren().add(button);
+            });
+            vBox.getChildren().add(quitButton);
+            quitButton.setOnMouseClicked(event1 -> {
+                buyGunStage.close();
+            });
+            for (Button gunButton : gunButtons) {
+                gunButton.setOnMouseClicked(event1 -> {
+                    boolean canBuy = Engine.getInstance().hero.setGun(Gun.valueOf(gunButton.getText()));
+                    if (canBuy == false) {
+                        Stage stage1 = new Stage();
+                        Scene cantBuyScene = new Scene(new Group());
+                        Group cantBuyRoot = (Group) cantBuyScene.getRoot();
+                        VBox vBox1 = new VBox();
+                        Label label1 = new Label("not enough gold");
+                        Button okButton = new Button("OK");
+                        vBox1.getChildren().addAll(label1, okButton);
+                        cantBuyRoot.getChildren().add(vBox1);
+                        okButton.setOnMouseClicked(event2 -> {
+                            stage1.close();
+                        });
+                    } else {
+                        buyGunStage.close();
+                    }
+
+                });
+            }
 
             buyGunRoot.getChildren().addAll(vBox);
+            buyGunStage.show();
         });
 
     }

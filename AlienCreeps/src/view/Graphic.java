@@ -188,7 +188,7 @@ public class Graphic extends Application {
     }
 
     private void showDeadAliens(Integer counter, Group rootOfMianScene) {
-        if (AlienCreeps.getDeadAlienCreeps().size()==0){
+        if (AlienCreeps.getDeadAlienCreeps().size() == 0) {
             return;
         }
         boolean removeOrNo = false;
@@ -229,7 +229,7 @@ public class Graphic extends Application {
         }
     }
 
-    private void moveOfAliens(Group rootOfMianScene, int counter) {
+    private void moveOfAliens(Group rootOfMainScene, int counter) {
         try {
             outer:
             for (int i = 0; i < AlienCreeps.getAllAlienCreeps().size(); i++) {
@@ -274,7 +274,7 @@ public class Graphic extends Application {
                             break outer;
                         }
                         AlienCreeps.getAllAlienCreeps().remove(alienCreeps);
-                        rootOfMianScene.getChildren().remove(alienCreeps.getImageView());
+                        rootOfMainScene.getChildren().remove(alienCreeps.getImageView());
                         i--;
                         continue outer;
                     }
@@ -306,7 +306,7 @@ public class Graphic extends Application {
                     }
 
                     ImageView imageView = null;
-                    rootOfMianScene.getChildren().remove(alienCreeps.getImageView());
+                    rootOfMainScene.getChildren().remove(alienCreeps.getImageView());
                     switch (alienCreeps.getAlienCreepTypes()) {
                         case Aironion:
                             alienCreeps.setImageView(new ImageView(aironionImages.getNonFiringImages()[0]));
@@ -322,7 +322,7 @@ public class Graphic extends Application {
                             break;
                     }
                     alienCreeps.getImageView().relocate(alienCreeps.getCoordinates()[0], alienCreeps.getCoordinates()[1]);
-                    rootOfMianScene.getChildren().add(alienCreeps.getImageView());
+                    rootOfMainScene.getChildren().add(alienCreeps.getImageView());
                 }
             }
         } catch (Exception e) {
@@ -345,6 +345,7 @@ public class Graphic extends Application {
                             hero.drawHero(hero.moveLeftPics, 2);
                         }
                     }
+
                 }
             }
         }
@@ -364,6 +365,28 @@ public class Graphic extends Application {
                             hero.setCoordinates(new int[]{wormHole.getEndCoordinates()[0] - 35, wormHole.getEndCoordinates()[1] - 35});
                             hero.drawHero(hero.moveLeftPics, 2);
                             crossedWormHole = wormHole;
+                        }
+                    }
+                    if (movableFirings instanceof AlienCreeps) {
+                        AlienCreeps alienCreeps = (AlienCreeps) movableFirings;
+                        if (alienCreeps.getAlienCreepTypes().name().equals("Aironion")) {
+                            continue;
+                        }
+                        int xAlienCreep = alienCreeps.getCoordinates()[0];
+                        int yAlienCreep = alienCreeps.getCoordinates()[1];
+                        int xWorm = wormHole.getStartCoordinates()[0];
+                        int yWorm = wormHole.getStartCoordinates()[1];
+                        if (xWorm == xAlienCreep && yWorm == yAlienCreep) {
+                            //for (int[] ints : alienCreeps.getPath().getThisPathHomes()) {
+                            for (int i = 0; i < alienCreeps.getPath().getThisPathHomes().size(); i++) {
+                                int[] ints = alienCreeps.getPath().getThisPathHomes().get(i);
+                                if (ints[0] == wormHole.getEndCoordinates()[0] && ints[1] == wormHole.getEndCoordinates()[1]) {
+                                    alienCreeps.setCurrentHomeNo(i + 1);
+                                    int endX = alienCreeps.getPath().getThisPathHomes().get(alienCreeps.getCurrentHomeNo())[0];
+                                    int endY = alienCreeps.getPath().getThisPathHomes().get(alienCreeps.getCurrentHomeNo())[1];
+                                    alienCreeps.setCoordinates(new int[]{endX, endY});
+                                }
+                            }
                         }
                     }
                 }
