@@ -4,14 +4,27 @@ import gameLogic.Barrack;
 import gameLogic.Engine;
 import gameLogic.firings.Firings;
 import gameLogic.firings.movableFirings.alienCreeps.AlienCreeps;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 
 public class Soldier extends YourFighters implements Firings {
     int counterForFire = 0;
+    ImageView imageView;
+    AlienCreeps target;
 
-    public Soldier() { // hero behesh ezafe kardam ta too sarbazash adesh konam
+    public Soldier() {
         super(true);
         Engine.getInstance().hero.getAllSoldiers().add(this);
         MovableFirings.getAllMovableFirings().add(this);
+        try {
+            imageView = new ImageView(new Image(new FileInputStream("images/soldier images/MoveRight1.png")));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isDead(Hero hero, Barrack barrack) {
@@ -24,35 +37,14 @@ public class Soldier extends YourFighters implements Firings {
     }
 
     @Override
-    protected void increaseExperience() {
-        experience += 5;
-    }
-
-
-
-    @Override
     public void freeze() {
 
     }
 
     public void weaken(AlienCreeps alienCreep) {
             alienCreep.setEnergy(alienCreep.getEnergy() - this.getPower());
-            alienCreep.isDead();
     }
 
-    public void move(Hero hero) {
-        for (int i = 0; i < hero.getAllSoldiers().size(); i++) {
-            if (i == 0) {
-                setCoordinates(new int[]{hero.getCoordinates()[0] + 20, hero.getCoordinates()[1]});
-            }
-            if (i == 1) {
-                setCoordinates(new int[]{hero.getCoordinates()[0] - 20, hero.getCoordinates()[1]});
-            }
-            if (i == 2) {
-                setCoordinates(new int[]{hero.getCoordinates()[0], hero.getCoordinates()[1] + 20});
-            }
-        }
-    }
 
     public int getCounterForFire() {
         return counterForFire;
@@ -62,4 +54,19 @@ public class Soldier extends YourFighters implements Firings {
         this.counterForFire = counterForFire;
     }
 
+    public ImageView getImageView() {
+        return imageView;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }
+
+    public AlienCreeps getTarget() {
+        return target;
+    }
+
+    public void setTarget(AlienCreeps target) {
+        this.target = target;
+    }
 }

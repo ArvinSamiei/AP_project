@@ -1,6 +1,5 @@
 package gameLogic.firings.movableFirings;
 
-import gameLogic.Barrack;
 import gameLogic.Engine;
 import gameLogic.firings.Firings;
 import gameLogic.firings.Gun;
@@ -100,6 +99,7 @@ public class Hero extends YourFighters implements Firings {
         walkState++;
         if (walkState == 4)
             walkState = 0;
+
         drawHero(moveDownwardPics, walkState);
     }
 
@@ -109,6 +109,7 @@ public class Hero extends YourFighters implements Firings {
         if (walkState == 4)
             walkState = 0;
         drawHero(moveLeftPics, walkState);
+
     }
 
     public void moveHeroRight(int speed) {
@@ -117,6 +118,7 @@ public class Hero extends YourFighters implements Firings {
         if (walkState == 4)
             walkState = 0;
         drawHero(moveRightPics, walkState);
+
     }
 
     public void drawHero(Image[] heroPics, int stateOfWalk) {
@@ -149,36 +151,7 @@ public class Hero extends YourFighters implements Firings {
 
     }
 
-    private void removePreviousHeroPic() {
-        for (Image element : moveForwardPics) {
-            if (root.getChildren().contains(element))
-                root.getChildren().remove(element);
-        }
-        for (Image element : moveDownwardPics) {
-            if (root.getChildren().contains(element))
-                root.getChildren().remove(element);
-        }
-        for (Image element : moveLeftPics) {
-            if (root.getChildren().contains(element))
-                root.getChildren().remove(element);
-        }
-        for (Image element : moveRightPics) {
-            if (root.getChildren().contains(element))
-                root.getChildren().remove(element);
-        }
-        for (Image heroFiringPic : fireLeftImages) {
-            if (root.getChildren().contains(heroFiringPic))
-                root.getChildren().remove(heroFiringPic);
-        }
-    }
 
-    private ArrayList<AlienCreeps> findHeroTargets() {
-        if (gun.isPogromist() == false) {
-            return this.findOneTarget();
-        } else {
-            return this.findSomeTarget();
-        }
-    }
 
     public void weaken(AlienCreeps alienCreep) {
         if (alienCreep.getAlienCreepTypes().getType().equals("air")) {
@@ -190,7 +163,6 @@ public class Hero extends YourFighters implements Firings {
 
     @Override
     public void freeze() {
-        ArrayList<AlienCreeps> targets = findSomeTarget();
         if (targets.size() == 0) {
             counterForFire = 0;
         }
@@ -229,11 +201,6 @@ public class Hero extends YourFighters implements Firings {
         this.counterForFire = counterForFire;
     }
 
-
-    @Override
-    protected void increaseExperience() {
-
-    }
 
     public ImageView getImageView() {
         return imageView;

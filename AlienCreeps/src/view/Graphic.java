@@ -1,6 +1,7 @@
 package view;
 
 import controller.ControllerClass;
+import gameLogic.Barrack;
 import gameLogic.Engine;
 import gameLogic.WeaponPlace;
 import gameLogic.firings.WeaponsObject;
@@ -103,7 +104,6 @@ public class Graphic extends Application {
 
             showDeadAliens(counter, rootOfMainScene);
 
-            //}
 
             firingPicsOfAliens();
 
@@ -178,13 +178,8 @@ public class Graphic extends Application {
 
                     if (weapon.getCounterForFire() == weapon.getFireRate()) {
                         weapon.setCounterForFire(0);
-                        //weapon.getTargets().clear();
                     }
 
-
-//                    if (weapon.getTargets().size() == 0) {
-//                        weapon.setCounterForFire(0);
-//                    }
 
                     for (int i1 = 0; i1 < weapon.getTargets().size(); i1++) {
                         AlienCreeps alienCreeps = weapon.getTargets().get(i1);
@@ -241,19 +236,92 @@ public class Graphic extends Application {
 
             }
 
-            //}
 
-            for (Soldier soldier : Engine.getInstance().hero.getAllSoldiers()) {
-                if (soldier.getCounterForFire() % (60 / soldier.getFireRate()) == 0) {
-                    //soldier.weaken();
+            for (int i = 0; i < hero.getAllSoldiers().size(); i++) {
+                Soldier soldier = hero.getAllSoldiers().get(i);
+                switch (i) {
+                    case 0:
+                        soldier.setCoordinates(new int[]{hero.getCoordinates()[0] - 32, hero.getCoordinates()[1]});
+                        break;
+                    case 1:
+                        soldier.setCoordinates(new int[]{hero.getCoordinates()[0], hero.getCoordinates()[1] - 32});
+                        break;
+                    case 2:
+                        soldier.setCoordinates(new int[]{hero.getCoordinates()[0] + 64, hero.getCoordinates()[1]});
                 }
-                soldier.setCounterForFire(soldier.getCounterForFire() + 1);
             }
+
+            for (Soldier soldier : hero.getAllSoldiers()) {
+                rootOfMainScene.getChildren().remove(soldier.getImageView());
+                soldier.getImageView().relocate(soldier.getCoordinates()[0], soldier.getCoordinates()[1]);
+                rootOfMainScene.getChildren().add(soldier.getImageView());
+            }
+
+
+            for (AlienCreeps alienCreeps : AlienCreeps.getAllAlienCreeps()) {
+                for (Soldier soldier : hero.getAllSoldiers()) {
+                    if (soldier.getTarget() == null) {
+                        continue;
+                    }
+                    int x = Math.abs(alienCreeps.getCoordinates()[0] - soldier.getCoordinates()[0]);
+                    int y = Math.abs(alienCreeps.getCoordinates()[1] - soldier.getCoordinates()[1]);
+                    if (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) <= soldier.getFireRange()) {
+                        soldier.setTarget(alienCreeps);
+                        if (alienCreeps.getShooterToThis() == null) {
+                            alienCreeps.setShooterToThis(soldier);
+                        }
+                    }
+                }
+            }
+
+            for (int i1 = 0; i1 < hero.getAllSoldiers().size(); i1++) {
+                Soldier soldier = hero.getAllSoldiers().get(i1);
+                if (soldier.getTarget() != null) {
+                    if (MainScene.moved == true) {
+                        soldier.getTarget().setFiring(false);
+                        soldier.setTarget(null);
+                    } else {
+                        soldier.setCounterForFire(soldier.getCounterForFire() + 1);
+                        if (soldier.getCounterForFire() % (60 / soldier.getFireRate()) == 0) {
+                            soldier.weaken(soldier.getTarget());
+                            soldier.getTarget().setFiring(true);
+                            if (soldier.getTarget().isDead()) {
+                                Engine.getInstance().getPlayer().setGold(Engine.getInstance().getPlayer().getGold() + 5);
+                                AlienCreeps.getDeadAlienCreeps().add(soldier.getTarget());
+                                AlienCreeps.getAllAlienCreeps().remove(soldier.getTarget());
+                                soldier.setTarget(null);
+                                soldier.setCounterForFire(0);
+                            }
+                            if (soldier.getCounterForFire() == soldier.getFireRate()) {
+                                soldier.setCounterForFire(0);
+                            }
+                            try {
+                                System.out.println("shelik");
+                                soldier.getImageView().setImage(new Image(new FileInputStream("images/soldier images/MoveRight1Firing.png")));
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+
 
             manageHeroDeath(hero);
 
+            for (int i = 0; i < Barrack.getInstance().getMinsToCreateASoldier().size(); i++) {
+                Integer integer = Barrack.getInstance().getMinsToCreateASoldier().get(i);
+                if (integer.equals(hero.getTimeToreturn())) {
+                    Soldier soldier = new Soldier();
+                    Barrack.getInstance().getMinsToCreateASoldier().remove(integer);
+                } else {
+                    integer++;
+                    Barrack.getInstance().getMinsToCreateASoldier().set(i, integer);
+                }
+            }
         }
     };
+
 
     private void manageHeroDeath(Hero hero) {
         if (hero.isDeadStat() == true) {
@@ -292,6 +360,7 @@ public class Graphic extends Application {
             }
         }
     }
+
 
     private void firingPicsOfAliens() {
         for (AlienCreeps alienCreeps : AlienCreeps.getAllAlienCreeps()) {
@@ -397,7 +466,9 @@ public class Graphic extends Application {
             int y = Math.abs(alienCreeps.getCoordinates()[1] - hero.getCoordinates()[1]);
             if (x <= hero.getFireRange() && y <= hero.getFireRange()) {
                 hero.setTarget(alienCreeps);
-                alienCreeps.setShooterToThis(hero);
+                if (alienCreeps.getShooterToThis() == null) {
+                    alienCreeps.setShooterToThis(hero);
+                }
                 break;
             }
         }
