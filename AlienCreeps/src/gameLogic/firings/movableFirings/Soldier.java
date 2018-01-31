@@ -18,13 +18,15 @@ public class Soldier extends YourFighters implements Firings {
 
     public Soldier() {
         super(true);
+        imageView = new ImageView();
+        System.out.println("soldier made");
         Engine.getInstance().hero.getAllSoldiers().add(this);
         MovableFirings.getAllMovableFirings().add(this);
-        try {
-            imageView = new ImageView(new Image(new FileInputStream("images/soldier images/MoveRight1.png")));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            imageView = new ImageView(new Image(new FileInputStream("images/soldier images/MoveRight1.png")));
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public boolean isDead() {
@@ -42,7 +44,7 @@ public class Soldier extends YourFighters implements Firings {
     }
 
     public void weaken(AlienCreeps alienCreep) {
-            alienCreep.setEnergy(alienCreep.getEnergy() - this.getPower());
+        alienCreep.setEnergy(alienCreep.getEnergy() - this.getPower());
     }
 
 

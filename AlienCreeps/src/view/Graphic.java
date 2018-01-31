@@ -162,9 +162,7 @@ public class Graphic extends Application {
             }
 
             for (Soldier soldier : hero.getAllSoldiers()) {
-                rootOfMainScene.getChildren().remove(soldier.getImageView());
                 soldier.getImageView().relocate(soldier.getCoordinates()[0], soldier.getCoordinates()[1]);
-                rootOfMainScene.getChildren().add(soldier.getImageView());
             }
 
 
@@ -222,14 +220,16 @@ public class Graphic extends Application {
 
             for (int i = 0; i < Barrack.getInstance().getMinsToCreateASoldier().size(); i++) {
                 Integer integer = Barrack.getInstance().getMinsToCreateASoldier().get(i);
-                if (integer.equals(hero.getTimeToreturn())) {
+                if (integer == 90) {
                     Soldier soldier = new Soldier();
-                    Barrack.getInstance().getMinsToCreateASoldier().remove(integer);
+                    rootOfMainScene.getChildren().add(soldier.getImageView());
+                    Barrack.getInstance().getMinsToCreateASoldier().remove(i);
                 } else {
                     integer++;
                     Barrack.getInstance().getMinsToCreateASoldier().set(i, integer);
                 }
             }
+
         }
     };
 
@@ -410,7 +410,6 @@ public class Graphic extends Application {
                 if (alienCreeps.getShooterToThis() instanceof Soldier){
                     Soldier soldier = (Soldier) alienCreeps.getShooterToThis();
                     rootOfMainScene.getChildren().remove(soldier.getImageView());
-                    soldier.isDead();
                 }
                 alienCreeps.setShooterToThis(null);
                 alienCreeps.setFiring(false);

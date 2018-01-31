@@ -39,18 +39,12 @@ public abstract class MovableFirings implements Firings {
 
     public boolean isDead() {
         if (this.energy <= 0) {
-            System.out.println("dead");
             return true;
         }
 
         return false;
     }
 
-    /**
-     * tabe e payin faghat vase vaghtie ke yedoone target dashte bashe chon momkene do ta alien ham fasele
-     * bahash bashan vali in faghat yekishoono mizane .
-     * اگه همه ی همسايه هاش رو بزنه که اگه همه بميرن که ديگه چيزی تو شعاعش نيست .
-     */
 
 
     // alaki neveshtam ke too soldier gir nade ke constructor benevis
@@ -64,7 +58,13 @@ public abstract class MovableFirings implements Firings {
     }
 
     public void setEnergy(int energy) {
+        if (this instanceof Soldier){
+            System.out.println(energy);
+        }
         if (energy <= 0) {
+            if (this instanceof Soldier){
+                System.out.println(energy);
+            }
             this.energy = 0;
         } else {
             this.energy = energy;
