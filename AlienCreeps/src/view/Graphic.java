@@ -725,21 +725,25 @@ public class Graphic extends Application {
     private void makeAlienCreeps() {
         Random random = new Random();
         AlienCreeps alienCreep;
-        int randomNumber = random.nextInt(4) + 1;
-        switch (randomNumber) {
-            case 1:
-                alienCreep = new AlienCreeps(Activionion);
-                break;
-            case 2:
-                alienCreep = new AlienCreeps(Algwasonion);
-                break;
-            case 3:
-                alienCreep = new AlienCreeps(Aironion);
-                break;
-            case 4:
-                alienCreep = new AlienCreeps(Albertonion);
-                break;
+        int randomNumOfAliens = random.nextInt(4) + 1;
+        for (int i = 0; i < randomNumOfAliens; i++) {
+            int randomNumber = random.nextInt(4) + 1;
+            switch (randomNumber) {
+                case 1:
+                    alienCreep = new AlienCreeps(Activionion);
+                    break;
+                case 2:
+                    alienCreep = new AlienCreeps(Algwasonion);
+                    break;
+                case 3:
+                    alienCreep = new AlienCreeps(Aironion);
+                    break;
+                case 4:
+                    alienCreep = new AlienCreeps(Albertonion);
+                    break;
+            }
         }
+
     }
 
     @Override

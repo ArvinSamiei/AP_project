@@ -283,16 +283,18 @@ public class MainScene extends Scene {
                             root.getChildren().remove(textArea);
                         }
                         if (textArea.getText().equals("Tesla")) {
+                            boolean teslaShooted = false;
                             for (int i = 0; i < AlienCreeps.getAllAlienCreeps().size(); i++) {
                                 if (teslashooted == true) {
                                     break;
                                 }
-                                if (Tesla.getInstance().numOfUses == 2){
+                                if (Tesla.getInstance().numOfUses == 2) {
                                     break;
                                 }
                                 if (Tesla.getInstance().isPossibleOrNot() == false) {
                                     break;
                                 }
+                                teslaShooted = true;
 
                                 try {
                                     teslaImage.setImage(new Image(new FileInputStream("images/Tesla/teslaFiring.png")));
@@ -308,10 +310,13 @@ public class MainScene extends Scene {
                                     i--;
                                 }
                             }
-                            Tesla.getInstance().numOfUses++;
-                            teslashooted = true;
+                            if (teslaShooted == true) {
+                                Tesla.getInstance().numOfUses++;
+                                teslashooted = true;
+                            }
                             root.getChildren().remove(textArea);
                         }
+                        root.getChildren().remove(textArea);
                     }
                 });
             }
