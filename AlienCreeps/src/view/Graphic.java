@@ -113,7 +113,7 @@ public class Graphic extends Application {
 
             firingPicsOfAliens();
 
-            alienCreepsFire();
+            alienCreepsFire(rootOfMainScene);
 
             for (int i = 0; i < WeaponPlace.getWeaponPlaces().length; i++) {
                 WeaponPlace weaponPlace = WeaponPlace.getWeaponPlaces()[i];
@@ -149,17 +149,15 @@ public class Graphic extends Application {
             weaponsFire(mainScene);
 
 
-            for (int i = 0; i < hero.getAllSoldiers().size(); i++) {
-                Soldier soldier = hero.getAllSoldiers().get(i);
-                switch (i) {
-                    case 0:
-                        soldier.setCoordinates(new int[]{hero.getCoordinates()[0] - 32, hero.getCoordinates()[1]});
-                        break;
-                    case 1:
-                        soldier.setCoordinates(new int[]{hero.getCoordinates()[0], hero.getCoordinates()[1] - 32});
-                        break;
-                    case 2:
-                        soldier.setCoordinates(new int[]{hero.getCoordinates()[0] + 64, hero.getCoordinates()[1]});
+            manageImagesOfSoldiers(hero);
+
+            for (Soldier soldier : hero.getAllSoldiers()) {
+                if (soldier.getTarget() == null){
+                    try {
+                        soldier.getImageView().setImage(new Image(new FileInputStream("images/soldier images/MoveRight1.png")));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -172,7 +170,7 @@ public class Graphic extends Application {
 
             for (AlienCreeps alienCreeps : AlienCreeps.getAllAlienCreeps()) {
                 for (Soldier soldier : hero.getAllSoldiers()) {
-                    if (soldier.getTarget() == null) {
+                    if (soldier.getTarget() != null) {
                         continue;
                     }
                     int x = Math.abs(alienCreeps.getCoordinates()[0] - soldier.getCoordinates()[0]);
@@ -234,6 +232,22 @@ public class Graphic extends Application {
             }
         }
     };
+
+    private void manageImagesOfSoldiers(Hero hero) {
+        for (int i = 0; i < hero.getAllSoldiers().size(); i++) {
+            Soldier soldier = hero.getAllSoldiers().get(i);
+            switch (i) {
+                case 0:
+                    soldier.setCoordinates(new int[]{hero.getCoordinates()[0] - 32, hero.getCoordinates()[1]});
+                    break;
+                case 1:
+                    soldier.setCoordinates(new int[]{hero.getCoordinates()[0], hero.getCoordinates()[1] - 32});
+                    break;
+                case 2:
+                    soldier.setCoordinates(new int[]{hero.getCoordinates()[0] + 64, hero.getCoordinates()[1]});
+            }
+        }
+    }
 
     private void manageTesla() {
         if (MainScene.teslashooted == true) {
@@ -379,7 +393,7 @@ public class Graphic extends Application {
         }
     }
 
-    private void alienCreepsFire() {
+    private void alienCreepsFire(Group rootOfMainScene) {
         for (AlienCreeps alienCreeps : AlienCreeps.getAllAlienCreeps()) {
             if (alienCreeps.isFiring() == false) {
                 continue;
@@ -393,6 +407,11 @@ public class Graphic extends Application {
                 break;
             }
             if (alienCreeps.getShooterToThis().isDead()) {
+                if (alienCreeps.getShooterToThis() instanceof Soldier){
+                    Soldier soldier = (Soldier) alienCreeps.getShooterToThis();
+                    rootOfMainScene.getChildren().remove(soldier.getImageView());
+                    soldier.isDead();
+                }
                 alienCreeps.setShooterToThis(null);
                 alienCreeps.setFiring(false);
                 break;

@@ -27,10 +27,10 @@ public class Soldier extends YourFighters implements Firings {
         }
     }
 
-    public boolean isDead(Hero hero, Barrack barrack) {
+    public boolean isDead() {
         boolean dead = super.isDead();
         if (dead == true) {
-            hero.getAllSoldiers().remove(this);
+            Engine.getInstance().hero.getAllSoldiers().remove(this);
             Barrack.getInstance().getMinsToCreateASoldier().add(0);
         }
         return dead;
