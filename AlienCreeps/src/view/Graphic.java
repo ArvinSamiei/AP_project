@@ -89,17 +89,7 @@ public class Graphic extends Application {
                 makeAlienCreeps();
             }
             //tesla handle
-            if (MainScene.teslashooted == true) {
-                Tesla.getInstance().counterForFire++;
-                if (Tesla.getInstance().counterForFire == 600){
-                    try {
-                        MainScene.teslaImage.setImage(new Image(new FileInputStream("images/Tesla/tesla.png")));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    MainScene.teslashooted = false;
-                }
-            }
+            manageTesla();
 
             Hero hero = Engine.getInstance().hero;
 
@@ -153,112 +143,10 @@ public class Graphic extends Application {
                 }
             }
 
-            for (int i = 0; i < WeaponPlace.getWeaponPlaces().length; i++) {
-
-                WeaponPlace weaponPlace = WeaponPlace.getWeaponPlaces()[i];
-                if (weaponPlace.getWeapon() == null) {
-                    continue;
-                }
-
-                WeaponsObject weapon = weaponPlace.getWeapon();
-                if (weapon.getWeapon().equals(Weapon.Freezer)) {
-                    for (AlienCreeps alienCreeps : weapon.getTargets()) {
-                        alienCreeps.getAlienCreepTypes().setSpeed(alienCreeps.getAlienCreepTypes().speed);
-                    }
-                }
-                weapon.getTargets().clear();
-                for (int i1 = 0; i1 < AlienCreeps.getAllAlienCreeps().size(); i1++) {
-                    AlienCreeps alienCreeps = AlienCreeps.getAllAlienCreeps().get(i1);
-                    int x = Math.abs(alienCreeps.getCoordinates()[0] - weaponPlace.getCoordinates()[0]);
-                    int y = Math.abs(alienCreeps.getCoordinates()[1] - weaponPlace.getCoordinates()[1]);
-
-                    if (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) <= weapon.getRange()) {
-                        if (weapon.getPowerOnAirUnits() == 0 && alienCreeps.getAlienCreepTypes().getType().equals("air")) {
-                            continue;
-                        }
-                        weapon.getTargets().add(alienCreeps);
-                        if (weapon.isPogromist() == false) {
-                            break;
-                        }
-                    }
-                }
-            }
+            weaponsFindTarget();
 
 
-            for (int i = 0; i < WeaponPlace.getWeaponPlaces().length; i++) {
-                WeaponPlace weaponPlace = WeaponPlace.getWeaponPlaces()[i];
-                if (weaponPlace.getWeapon() == null) {
-                    continue;
-                }
-                WeaponsObject weapon = weaponPlace.getWeapon();
-
-                weapon.setCounterForFire(weapon.getCounterForFire() + 1);
-
-                if ((weapon.getCounterForFire() % (60 / weapon.getFireRate()) == 0)) {
-                    if (weapon.getTargets().size() == 0) {
-                        weapon.setCounterForFire(0);
-                        continue;
-                    }
-
-                    if (weapon.getCounterForFire() == weapon.getFireRate()) {
-                        weapon.setCounterForFire(0);
-                    }
-
-
-                    for (int i1 = 0; i1 < weapon.getTargets().size(); i1++) {
-                        AlienCreeps alienCreeps = weapon.getTargets().get(i1);
-                        int xDifference = alienCreeps.getCoordinates()[0] - weaponPlace.getCoordinates()[0];
-                        int yDifference = -(alienCreeps.getCoordinates()[1] - weaponPlace.getCoordinates()[1]);
-
-                        switch (weapon.getWeapon()) {
-                            case AntiAircraft:
-                                if (xDifference >= 0) {
-                                    mainScene.weaponplacesImages[i].setImage(mainScene.antiAircraftImages.getFiringImages()[1]);
-                                } else {
-                                    mainScene.weaponplacesImages[i].setImage(mainScene.antiAircraftImages.getFiringImages()[0]);
-                                }
-                                break;
-                            case MachineGun:
-                                if (xDifference >= 0 && yDifference >= 0) {
-                                    mainScene.weaponplacesImages[i].setImage(mainScene.machinGunImages.getFiringImages()[2]);
-                                } else if (xDifference >= 0 && yDifference <= 0) {
-                                    mainScene.weaponplacesImages[i].setImage(mainScene.machinGunImages.getFiringImages()[1]);
-                                } else if (xDifference <= 0 && yDifference >= 0) {
-                                    mainScene.weaponplacesImages[i].setImage(mainScene.machinGunImages.getFiringImages()[3]);
-                                } else if (xDifference <= 0 && yDifference <= 0) {
-                                    mainScene.weaponplacesImages[i].setImage(mainScene.machinGunImages.getFiringImages()[0]);
-                                }
-                                break;
-                            case Freezer:
-                                mainScene.weaponplacesImages[i].setImage(mainScene.freezerImages.getFiringImages()[0]);
-                                break;
-                            case Rocket:
-                                if (xDifference >= 0) {
-                                    mainScene.weaponplacesImages[i].setImage(mainScene.rocketImages.getFiringImages()[2]);
-                                } else {
-                                    if (yDifference <= 0) {
-                                        mainScene.weaponplacesImages[i].setImage(mainScene.rocketImages.getFiringImages()[6]);
-                                    } else {
-                                        mainScene.weaponplacesImages[i].setImage(mainScene.rocketImages.getFiringImages()[6]);
-                                    }
-                                }
-                                break;
-                            case Laser:
-                                mainScene.weaponplacesImages[i].setImage(mainScene.laserImages.getFiringImages()[0]);
-                                break;
-                        }
-                        weapon.shoot(alienCreeps);
-                        if (alienCreeps.getEnergy() <= 0) {
-                            Engine.getInstance().getPlayer().setGold(Engine.getInstance().getPlayer().getGold() + 5);
-                            weapon.getTargets().remove(alienCreeps);
-                            AlienCreeps.getDeadAlienCreeps().add(alienCreeps);
-                            AlienCreeps.getAllAlienCreeps().remove(alienCreeps);
-                        }
-                    }
-
-                }
-
-            }
+            weaponsFire(mainScene);
 
 
             for (int i = 0; i < hero.getAllSoldiers().size(); i++) {
@@ -346,6 +234,132 @@ public class Graphic extends Application {
             }
         }
     };
+
+    private void manageTesla() {
+        if (MainScene.teslashooted == true) {
+            if (Tesla.getInstance().numOfUses < 2) {
+                Tesla.getInstance().counterForFire++;
+                if (Tesla.getInstance().counterForFire == 600) {
+                    try {
+                        MainScene.teslaImage.setImage(new Image(new FileInputStream("images/Tesla/tesla.png")));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    MainScene.teslashooted = false;
+                }
+            }
+        }
+    }
+
+    private void weaponsFindTarget() {
+        for (int i = 0; i < WeaponPlace.getWeaponPlaces().length; i++) {
+
+            WeaponPlace weaponPlace = WeaponPlace.getWeaponPlaces()[i];
+            if (weaponPlace.getWeapon() == null) {
+                continue;
+            }
+
+            WeaponsObject weapon = weaponPlace.getWeapon();
+            if (weapon.getWeapon().equals(Weapon.Freezer)) {
+                for (AlienCreeps alienCreeps : weapon.getTargets()) {
+                    alienCreeps.getAlienCreepTypes().setSpeed(alienCreeps.getAlienCreepTypes().speed);
+                }
+            }
+            weapon.getTargets().clear();
+            for (int i1 = 0; i1 < AlienCreeps.getAllAlienCreeps().size(); i1++) {
+                AlienCreeps alienCreeps = AlienCreeps.getAllAlienCreeps().get(i1);
+                int x = Math.abs(alienCreeps.getCoordinates()[0] - weaponPlace.getCoordinates()[0]);
+                int y = Math.abs(alienCreeps.getCoordinates()[1] - weaponPlace.getCoordinates()[1]);
+
+                if (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) <= weapon.getRange()) {
+                    if (weapon.getPowerOnAirUnits() == 0 && alienCreeps.getAlienCreepTypes().getType().equals("air")) {
+                        continue;
+                    }
+                    weapon.getTargets().add(alienCreeps);
+                    if (weapon.isPogromist() == false) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void weaponsFire(MainScene mainScene) {
+        for (int i = 0; i < WeaponPlace.getWeaponPlaces().length; i++) {
+            WeaponPlace weaponPlace = WeaponPlace.getWeaponPlaces()[i];
+            if (weaponPlace.getWeapon() == null) {
+                continue;
+            }
+            WeaponsObject weapon = weaponPlace.getWeapon();
+
+            weapon.setCounterForFire(weapon.getCounterForFire() + 1);
+
+            if ((weapon.getCounterForFire() % (60 / weapon.getFireRate()) == 0)) {
+                if (weapon.getTargets().size() == 0) {
+                    weapon.setCounterForFire(0);
+                    continue;
+                }
+
+                if (weapon.getCounterForFire() == weapon.getFireRate()) {
+                    weapon.setCounterForFire(0);
+                }
+
+
+                for (int i1 = 0; i1 < weapon.getTargets().size(); i1++) {
+                    AlienCreeps alienCreeps = weapon.getTargets().get(i1);
+                    int xDifference = alienCreeps.getCoordinates()[0] - weaponPlace.getCoordinates()[0];
+                    int yDifference = -(alienCreeps.getCoordinates()[1] - weaponPlace.getCoordinates()[1]);
+
+                    switch (weapon.getWeapon()) {
+                        case AntiAircraft:
+                            if (xDifference >= 0) {
+                                mainScene.weaponplacesImages[i].setImage(mainScene.antiAircraftImages.getFiringImages()[1]);
+                            } else {
+                                mainScene.weaponplacesImages[i].setImage(mainScene.antiAircraftImages.getFiringImages()[0]);
+                            }
+                            break;
+                        case MachineGun:
+                            if (xDifference >= 0 && yDifference >= 0) {
+                                mainScene.weaponplacesImages[i].setImage(mainScene.machinGunImages.getFiringImages()[2]);
+                            } else if (xDifference >= 0 && yDifference <= 0) {
+                                mainScene.weaponplacesImages[i].setImage(mainScene.machinGunImages.getFiringImages()[1]);
+                            } else if (xDifference <= 0 && yDifference >= 0) {
+                                mainScene.weaponplacesImages[i].setImage(mainScene.machinGunImages.getFiringImages()[3]);
+                            } else if (xDifference <= 0 && yDifference <= 0) {
+                                mainScene.weaponplacesImages[i].setImage(mainScene.machinGunImages.getFiringImages()[0]);
+                            }
+                            break;
+                        case Freezer:
+                            mainScene.weaponplacesImages[i].setImage(mainScene.freezerImages.getFiringImages()[0]);
+                            break;
+                        case Rocket:
+                            if (xDifference >= 0) {
+                                mainScene.weaponplacesImages[i].setImage(mainScene.rocketImages.getFiringImages()[2]);
+                            } else {
+                                if (yDifference <= 0) {
+                                    mainScene.weaponplacesImages[i].setImage(mainScene.rocketImages.getFiringImages()[6]);
+                                } else {
+                                    mainScene.weaponplacesImages[i].setImage(mainScene.rocketImages.getFiringImages()[6]);
+                                }
+                            }
+                            break;
+                        case Laser:
+                            mainScene.weaponplacesImages[i].setImage(mainScene.laserImages.getFiringImages()[0]);
+                            break;
+                    }
+                    weapon.shoot(alienCreeps);
+                    if (alienCreeps.getEnergy() <= 0) {
+                        Engine.getInstance().getPlayer().setGold(Engine.getInstance().getPlayer().getGold() + 5);
+                        weapon.getTargets().remove(alienCreeps);
+                        AlienCreeps.getDeadAlienCreeps().add(alienCreeps);
+                        AlienCreeps.getAllAlienCreeps().remove(alienCreeps);
+                    }
+                }
+
+            }
+
+        }
+    }
 
 
     private void manageHeroDeath(Hero hero) {

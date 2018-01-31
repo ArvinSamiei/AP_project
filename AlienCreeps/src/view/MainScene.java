@@ -635,8 +635,12 @@ public class MainScene extends Scene {
             ImageView quit = new ImageView(new Image(new FileInputStream(new File("images/map images/quit.png"))));
             quit.relocate(1240, 42);
             quit.setOnMouseClicked(e1 -> {
+//                stage.close();
+//                MainScene mainScene = (MainScene) stage.getScene();
+//                mainScene.getMediaPlayer().stop();
                 StartScene startScene = new StartScene(new Group(), 1280, 960, Color.BLUE, stage);
                 stage.setScene(startScene);
+                //stage.show();
             });
             root.getChildren().add(quit);
             return quit;
