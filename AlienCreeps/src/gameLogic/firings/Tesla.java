@@ -1,19 +1,17 @@
 package gameLogic.firings;
 
-import gameLogic.firings.movableFirings.alienCreeps.AlienCreeps;
-
-import java.util.ArrayList;
-
 public class Tesla implements Firings {
     private int range;
     private int cooldown;
+    public int counterForFire = 0;
     private int remainingCooldown;
     private int chargesLeft;
     private static boolean possibleOrNot = false;
     private static Tesla tesla = new Tesla();
+    public int numOfUses = 0;
 
     private Tesla() {
-
+        range = 10 * 20;
     }
 
 
@@ -50,43 +48,6 @@ public class Tesla implements Firings {
     }
 
 
-    public void fire(int middleX, int middleY) {
-        if (getChargesLeft() > 0 && getRemainingCooldown() == 0) {
-            ArrayList<AlienCreeps> targets = new ArrayList<>();
-            targets = findTarget(middleX, middleY);
-            kill(targets);
-            setChargesLeft(getChargesLeft() - 1);
-            setRemainingCooldown(getCooldown());
-        } else if (chargesLeft == 0)
-            System.out.println("OPS, tesla has no charges left!");
-        else if (getRemainingCooldown() != 0)
-            System.out.println("tesla is on cooldown... \t " + remainingCooldown + " seconds remaining");
-
-
-    }
-
-    public ArrayList<AlienCreeps> findTarget(int middleX, int middleY) {
-        ArrayList<AlienCreeps> targets = new ArrayList<>();
-        for (AlienCreeps alienCreep : AlienCreeps.getAllAlienCreeps()) {
-            if (distance(alienCreep.getCoordinates(), middleX, middleY) <= getRange())
-                targets.add(alienCreep);
-        }
-        return targets;
-    }
-
-    private double distance(int[] coOrdinate, int middleX, int middleY) {
-        double deltaXInPow2 = Math.pow(Math.abs(coOrdinate[0] - middleX), 2);
-        double deltaYInPow2 = Math.pow(Math.abs(coOrdinate[1] - middleY), 2);
-        return Math.sqrt(deltaXInPow2 + deltaYInPow2);
-    }
-
-    public void kill(ArrayList targets) {
-        for (AlienCreeps alienCreep : AlienCreeps.getAllAlienCreeps()) {
-            if (targets.contains(alienCreep))
-                AlienCreeps.getAllAlienCreeps().remove(alienCreep);
-        }
-    }
-
     public static boolean isPossibleOrNot() {
         return possibleOrNot;
     }
@@ -107,7 +68,6 @@ public class Tesla implements Firings {
     public void weaken() {
 
     }
-
 
 
 }

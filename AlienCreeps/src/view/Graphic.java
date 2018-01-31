@@ -4,6 +4,7 @@ import controller.ControllerClass;
 import gameLogic.Barrack;
 import gameLogic.Engine;
 import gameLogic.WeaponPlace;
+import gameLogic.firings.Tesla;
 import gameLogic.firings.Weapon;
 import gameLogic.firings.WeaponsObject;
 import gameLogic.firings.movableFirings.Hero;
@@ -41,6 +42,7 @@ public class Graphic extends Application {
     private AlgwasonionImages algwasonionImages = new AlgwasonionImages();
     private AironionImages aironionImages = new AironionImages();
     private ActivinionImages activinionImages = new ActivinionImages();
+    static ImageView teslaImageView = new ImageView();
 
     public static boolean isIsMainSceneOrNot() {
         return isMainSceneOrNot;
@@ -86,6 +88,18 @@ public class Graphic extends Application {
             if (counter % 240 == 0) {
                 makeAlienCreeps();
             }
+            //tesla handle
+            if (MainScene.teslashooted == true) {
+                Tesla.getInstance().counterForFire++;
+                if (Tesla.getInstance().counterForFire == 600){
+                    try {
+                        MainScene.teslaImage.setImage(new Image(new FileInputStream("images/Tesla/tesla.png")));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    MainScene.teslashooted = false;
+                }
+            }
 
             Hero hero = Engine.getInstance().hero;
 
@@ -100,6 +114,7 @@ public class Graphic extends Application {
                 findHeroTarget(hero);
                 heroFire(hero);
             }
+
 
             MainScene.enrgyOfHero.setText("Energy of hero : " + hero.getEnergy());
 
@@ -146,7 +161,7 @@ public class Graphic extends Application {
                 }
 
                 WeaponsObject weapon = weaponPlace.getWeapon();
-                if (weapon.getWeapon().equals(Weapon.Freezer)){
+                if (weapon.getWeapon().equals(Weapon.Freezer)) {
                     for (AlienCreeps alienCreeps : weapon.getTargets()) {
                         alienCreeps.getAlienCreepTypes().setSpeed(alienCreeps.getAlienCreepTypes().speed);
                     }

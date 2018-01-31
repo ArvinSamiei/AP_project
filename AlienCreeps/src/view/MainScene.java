@@ -39,6 +39,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainScene extends Scene {
+    public static boolean teslashooted = false;
+
+    public static ImageView teslaImage;
 
     public static boolean moved = false;
     boolean pauseState = false;
@@ -250,6 +253,11 @@ public class MainScene extends Scene {
 
         makeGunButtons(root);
 
+        makeCheatCodes(root);
+
+    }
+
+    private void makeCheatCodes(Group root) {
         root.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.TAB) {
                 TextArea textArea = new TextArea();
@@ -264,22 +272,50 @@ public class MainScene extends Scene {
                                 i--;
                             }
                             root.getChildren().remove(textArea);
-                        }
-                        else {
-                            if (textArea.getText().equals("money")){
+                        } else {
+                            if (textArea.getText().equals("money")) {
                                 Engine.getInstance().getPlayer().setGold(Engine.getInstance().getPlayer().getGold() + 200);
                                 root.getChildren().remove(textArea);
                             }
                         }
-                        if (textArea.getText().equals("health")){
+                        if (textArea.getText().equals("health")) {
                             Engine.getInstance().hero.setEnergy(Engine.getInstance().hero.getEnergy() + 100);
+                            root.getChildren().remove(textArea);
+                        }
+                        if (textArea.getText().equals("Tesla")) {
+                            for (int i = 0; i < AlienCreeps.getAllAlienCreeps().size(); i++) {
+                                if (teslashooted == true) {
+                                    break;
+                                }
+                                if (Tesla.getInstance().numOfUses == 2){
+                                    break;
+                                }
+                                if (Tesla.getInstance().isPossibleOrNot() == false) {
+                                    break;
+                                }
+
+                                try {
+                                    teslaImage.setImage(new Image(new FileInputStream("images/Tesla/teslaFiring.png")));
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                AlienCreeps alienCreeps = AlienCreeps.getAllAlienCreeps().get(i);
+                                int x = alienCreeps.getCoordinates()[0] - 18 * 32;
+                                int y = alienCreeps.getCoordinates()[1] - 19 * 32;
+                                if (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) <= Tesla.getInstance().getRange()) {
+                                    AlienCreeps.getDeadAlienCreeps().add(alienCreeps);
+                                    AlienCreeps.getAllAlienCreeps().remove(alienCreeps);
+                                    i--;
+                                }
+                            }
+                            Tesla.getInstance().numOfUses++;
+                            teslashooted = true;
                             root.getChildren().remove(textArea);
                         }
                     }
                 });
             }
         });
-
     }
 
     private void makeGunButtons(Group root) {
@@ -433,6 +469,7 @@ public class MainScene extends Scene {
 
             root.getChildren().add(background);
             ImageView teslaPlace = new ImageView(new Image(new FileInputStream(new File("images/map images/weaponPlace.png"))));
+            teslaImage = teslaPlace;
             teslaPlace.relocate(18 * 32, 960 - (12 * 32));
             ImageView putTeslaHere = new ImageView(new Image(new FileInputStream(new File("images/place_tesla_here.png"))));
             putTeslaHere.relocate(14 * 32, 960 - (12 * 32));
