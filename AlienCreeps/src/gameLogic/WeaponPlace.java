@@ -63,4 +63,9 @@ public class WeaponPlace {
     public void setCoordinates(int[] coordinates) {
         this.coordinates = coordinates;
     }
+    public static void stageClosed(){
+        for (WeaponPlace weaponPlace : weaponPlaces) {
+            weaponPlace.weapon = null;
+        }
+    }
 }

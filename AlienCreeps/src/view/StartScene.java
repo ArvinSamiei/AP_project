@@ -1,5 +1,9 @@
 package view;
 
+import gameLogic.WeaponPlace;
+import gameLogic.firings.Weapon;
+import gameLogic.firings.WeaponsObject;
+import gameLogic.firings.movableFirings.alienCreeps.AlienCreeps;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.*;
@@ -505,8 +509,11 @@ public class StartScene extends Scene {
             @Override
             public void handle(ActionEvent event) {
                 Graphic.setIsMainSceneOrNot(true);
+                stage.close();
+                AlienCreeps.getAllAlienCreeps().clear();
                 MainScene mainScene = new MainScene(new Group(), 1280, 960, Color.GRAY, stage);
                 stage.setScene(mainScene);
+                stage.show();
             }
         });
     }

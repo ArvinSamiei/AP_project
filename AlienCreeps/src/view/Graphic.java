@@ -62,18 +62,22 @@ public class Graphic extends Application {
 
         @Override
         public void handle(long now) {
+
             if (stage.getScene() instanceof StartScene) {
+                Engine.getInstance().getPlayer().setGold(400);
+                counter = 0;
                 return;
             }
             if (!(stage.getScene() instanceof MainScene)) {
                 return;
             }
+            ((MainScene) (stage.getScene())).goldLabel.setText("Gold : " + Engine.getInstance().getPlayer().getGold());
             if (((MainScene) stage.getScene()).getPauseState() == true) {
                 return;
             }
             MainScene mainScene = (MainScene) stage.getScene();
 
-            ((MainScene) (stage.getScene())).goldLabel.setText("Gold : " + Engine.getInstance().getPlayer().getGold());
+
             Group rootOfMainScene = (Group) ((MainScene) (stage.getScene())).getRoot();
             counter++;
             manageStartingPointOfWormHoles();
@@ -218,17 +222,17 @@ public class Graphic extends Application {
 
             manageHeroDeath(hero);
 
-            for (int i = 0; i < Barrack.getInstance().getMinsToCreateASoldier().size(); i++) {
-                Integer integer = Barrack.getInstance().getMinsToCreateASoldier().get(i);
-                if (integer == 90) {
-                    Soldier soldier = new Soldier();
-                    rootOfMainScene.getChildren().add(soldier.getImageView());
-                    Barrack.getInstance().getMinsToCreateASoldier().remove(i);
-                } else {
-                    integer++;
-                    Barrack.getInstance().getMinsToCreateASoldier().set(i, integer);
-                }
-            }
+//            for (int i = 0; i < Barrack.getInstance().getMinsToCreateASoldier().size(); i++) {
+//                Integer integer = Barrack.getInstance().getMinsToCreateASoldier().get(i);
+//                if (integer == 90) {
+//                    Soldier soldier = new Soldier();
+//                    rootOfMainScene.getChildren().add(soldier.getImageView());
+//                    Barrack.getInstance().getMinsToCreateASoldier().remove(i);
+//                } else {
+//                    integer++;
+//                    Barrack.getInstance().getMinsToCreateASoldier().set(i, integer);
+//                }
+//            }
 
         }
     };
@@ -743,7 +747,7 @@ public class Graphic extends Application {
     private void makeAlienCreeps() {
         Random random = new Random();
         AlienCreeps alienCreep;
-        int randomNumOfAliens = random.nextInt(4) + 1;
+        int randomNumOfAliens = random.nextInt(20) + 1;
         for (int i = 0; i < randomNumOfAliens; i++) {
             int randomNumber = random.nextInt(4) + 1;
             switch (randomNumber) {
